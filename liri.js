@@ -42,9 +42,28 @@ var divider = "\n\n=================================\n\n"
 
 if (command === 'concert-this') {
 
-    // node liri.js concert-this "Slowdive"
-    // node liri.js concert-this "Man Without Country"
-    // node liri.js concert-this "Mumford & Sons"
+    // node liri.js concert-this Dead Can Dance
+    // node liri.js concert-this The Birthday Massacre
+    // node liri.js concert-this Thievery Corporation
+    // node liri.js concert-this Sting
+    // node liri.js concert-this Sigur Ros
+    // node liri.js concert-this Royksopp
+    // node liri.js concert-this Nine Inch Nails
+    // node liri.js concert-this Neko Case
+    // node liri.js concert-this New Order
+    // node liri.js concert-this Mylène Farmer
+    // node liri.js concert-this Morrissey
+    // node liri.js concert-this Michael Brook
+    // node liri.js concert-this M83
+    // node liri.js concert-this Lykke Li
+    // node liri.js concert-this Hooverphonic
+    // node liri.js concert-this Grimes
+    // node liri.js concert-this God Is an Astronaut
+    // node liri.js concert-this The Church
+    // node liri.js concert-this Above & Beyond
+    // node liri.js concert-this Slowdive
+    // node liri.js concert-this Man Without Country
+    // node liri.js concert-this Mumford & Sons
 
     var bandsInTownAPI = "https://rest.bandsintown.com/artists/" + mediaName + "/events?app_id=7ed0c7d7d54a0ea01c5b00adf0d359ea";
     // console.log(bandsInTownAPI);
@@ -89,6 +108,7 @@ if (command === 'concert-this') {
     // node liri.js spotify-this-song Carolyns Fingers 
     // node liri.js spotify-this-song Avatar 
     // node liri.js spotify-this-song Oregon Hill 
+    // node liri.js spotify-this-song Shape of My Heart 
 
     var spotifyAPI;
 
@@ -125,7 +145,7 @@ if (command === 'concert-this') {
                 "Song : " + data.tracks.items[0].name,
                 "Album : " + data.tracks.items[0].album.name,
                 "Preview : " + data.tracks.items[0].preview_url,
-            ].join("\n\n");
+            ].join("\n");
 
             // Append showData and the divider to log.txt, print showData to the console
             fs.appendFile("log.txt", songDetails + divider, function (err) {
@@ -142,11 +162,27 @@ if (command === 'concert-this') {
 } else if (command === 'movie-this') {
 
     // node liri.js movie-this The Big Blue 
-    // node liri.js movie-this The Big Blue 
-    // node liri.js movie-this The Big Blue 
-    // node liri.js movie-this The Big Blue 
-    // node liri.js movie-this The Big Blue 
-    // node liri.js movie-this The Big Blue 
+    // node liri.js movie-this Leon The Professional 
+    // node liri.js movie-this La Femme Nikita 
+    // node liri.js movie-this 2001 A Space Odyssey 
+    // node liri.js movie-this Amelie 
+    // node liri.js movie-this Avatar 
+    // node liri.js movie-this Bolero 
+    // node liri.js movie-this Despicable Me 
+    // node liri.js movie-this Euro Trip 
+    // node liri.js movie-this Avatar 
+    // node liri.js movie-this Avatar 
+    // node liri.js movie-this Avatar 
+    // node liri.js movie-this Avatar 
+    // node liri.js movie-this Avatar 
+    // node liri.js movie-this Avatar 
+    // node liri.js movie-this Avatar 
+    // node liri.js movie-this Avatar 
+    // node liri.js movie-this Avatar 
+    // node liri.js movie-this Avatar 
+    // node liri.js movie-this Avatar 
+    // node liri.js movie-this Avatar 
+    // node liri.js movie-this Avatar 
 
     var OMDbAPI;
 
@@ -164,18 +200,38 @@ if (command === 'concert-this') {
 
     request(OMDbAPI, function (error, response, body) {
 
-        // use JSON.parse(body) to turn the returned JSON data body into a normal Object
+        // use JSON.parse(body) to turn JSON data body into a normal Object
         var OMDbData = JSON.parse(body);
-        // console.log('new bodyData object:', bodyData); 
+        // console.log('new OMDbData object:', OMDbData); 
 
-        // make variables for properties of the new bodyData whose values you want to use
-        var venueName = OMDbData[0].venue.name;
-        var venueLocation = OMDbData[0].venue.city;
-        // use MOMENT.JS to format the datetime data received into human-readable data
-        var venueDate = moment(OMDbData[0].datetime, moment.ISO_8601).format('MMMM Do YYYY, h:mm a');
+        // // * Title of the movie.
+        // var movieTitle = OMDbData[0].title;
+        // // * Year the movie came out.
+        // var movieYear = OMDbData[0].year;
+        // // * IMDB Rating of the movie.
+        // var movieIMDbRating = OMDbData[0].IMDb.rating;
+        // // * Rotten Tomatoes Rating of the movie.
+        // var movieRTRating = OMDbData[0].rottenTomatoes.rating;
+        // // * Country where the movie was produced.
+        // var movieCountry = OMDbData[0].country;
+        // // * Language of the movie.
+        // var movieLanguage = OMDbData[0].language;
+        // // * Actors in the movie.
+        // var movieActors = OMDbData[0].actors;
+        // // * Plot of the movie.
+        // var moviePlot = OMDbData[0].plot;
 
-        // output the requested infomation back to the CLI
-        var movieData = `${mediaName} are playing at the ${venueName} in ${venueLocation} on ${venueDate}`;
+        // or plop all that data into a single variable:
+        var movieData = [
+            "Title: " + OMDbData[0].title,
+            "Year : " + OMDbData[0].year,
+            "IMDb Rating : " + OMDbData[0].IMDb.rating,
+            "Rotten Tomatoes Rating : " + OMDbData[0].rottenTomatoes.rating,
+            "Country: " + OMDbData[0].country,
+            "Language: " + OMDbData[0].language,
+            "Actors: " + OMDbData[0].actors,
+            "Plot: " + OMDbData[0].plot,
+        ].join("\n");
 
         // Append movieData and the divider to log.txt, print movieData to the console
         fs.appendFile("log.txt", movieData + divider, function (err) {
@@ -185,11 +241,25 @@ if (command === 'concert-this') {
 
     });
 
-
-
 } else if (command === 'do-what-it-says') {
-    // console.log(command);
-    // console.log(mediaName);
+
+    // sample content line from random.txt
+    // spotify-this-song,"I Want it That Way"
+
+    var randomSelect = Math.floor(Math.random() * 3) + 1;
+    console.log(randomSelect);
+
+    if (randomSelect === 1) {
+        command = 'concert-this';
+    } else if (randomSelect === 2) {
+        command = 'spotify-this-song';
+    } else if (randomSelect === 3) {
+        command = 'movie-this';
+    }
+    console.log(command);
+
+
+
 
 
 }
