@@ -244,22 +244,6 @@ if (command === 'concert-this') {
 
 } else if (command === 'do-what-it-says') {
 
-    // node liri.js do-what-it-says
-    // sample content line from random.txt
-    // spotify-this-song,"I Want it That Way"
-
-    // var randomSelect = Math.floor(Math.random() * 3) + 1;
-    // console.log(randomSelect);
-
-    // if (randomSelect === 1) {
-    //     command = 'concert-this';
-    // } else if (randomSelect === 2) {
-    //     command = 'spotify-this-song';
-    // } else if (randomSelect === 3) {
-    //     command = 'movie-this';
-    // }
-    // console.log(command);
-
     // use FS to read the random.txt file
     fs.readFile('./random.txt', 'utf8', function read(err, data) {
 
@@ -304,23 +288,38 @@ if (command === 'concert-this') {
 
             // and make each first element the key
             var theKey = commandSubject[0];
-            // console.log(theKey);
+            console.log(theKey);
 
             // and make each second element the value
             // and .replace every " with nothing
             var theValue = commandSubject[1].replace(/["]+/g, '');
-            // console.log(theValue);
+            console.log(theValue);
 
-            arrayObject = {
-                theKey: theValue
-            };
-            console.log(arrayObject);
-
-            // and push each new Object into the new Array
-            objectArray.push(arrayObject);
-            // console.log(objectArray);
+            // take theKey and theValue, construct an Object, 
+            // and push them into the objectArray
+            objectArray.push({
+                [theKey]: theValue
+            });
 
         }
+        // print out the resulting filled objectArray
+        // which is the csv contents of the text file
+        // turned into an Array of Objects
+        console.log(objectArray);
+
+        // var randomSelect = Math.floor(Math.random() * 3) + 1;
+        // console.log(randomSelect);
+        
+        // if (randomSelect === 1) {
+        //     command = 'concert-this';
+        // } else if (randomSelect === 2) {
+        //     command = 'spotify-this-song';
+        // } else if (randomSelect === 3) {
+        //     command = 'movie-this';
+        // }
+        // console.log(command);
+
+
     };
 
     // node liri.js do-what-it-says
