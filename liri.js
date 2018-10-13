@@ -244,21 +244,86 @@ if (command === 'concert-this') {
 
 } else if (command === 'do-what-it-says') {
 
+    // node liri.js do-what-it-says
     // sample content line from random.txt
     // spotify-this-song,"I Want it That Way"
 
-    var randomSelect = Math.floor(Math.random() * 3) + 1;
-    console.log(randomSelect);
+    // var randomSelect = Math.floor(Math.random() * 3) + 1;
+    // console.log(randomSelect);
 
-    if (randomSelect === 1) {
-        command = 'concert-this';
-    } else if (randomSelect === 2) {
-        command = 'spotify-this-song';
-    } else if (randomSelect === 3) {
-        command = 'movie-this';
-    }
-    console.log(command);
+    // if (randomSelect === 1) {
+    //     command = 'concert-this';
+    // } else if (randomSelect === 2) {
+    //     command = 'spotify-this-song';
+    // } else if (randomSelect === 3) {
+    //     command = 'movie-this';
+    // }
+    // console.log(command);
 
+    // use FS to read the random.txt file
+    fs.readFile('./random.txt', 'utf8', function read(err, data) {
+
+        if (err) {
+            throw err;
+        }
+
+        // set a variable to stand for the text contents of the file
+        var randomTxtCSV = data;
+
+        // send that text content to a function to be processed
+        csvToArray(randomTxtCSV);
+
+    });
+
+    // function that processes the data from the random.txt file
+    function csvToArray(csv) {
+
+        // use .split to make the file data an Array
+        // with a new Array element created at each newline
+        randomTxtArray = csv.split('\n');
+        // console.log(randomTxtArray);
+
+        // define a new Array that will hold all the new
+        // {'command':'"mediaName"'} objects
+        var objectArray = [];
+
+        // define an Object variable for the new Objects
+        var arrayObject = {};
+
+
+        // then loop over every Array element 
+        // ['command,"mediaName"', 'command,"mediaName"', ...]
+        // and split each Array element into an Object
+        for (var i = 0; i < randomTxtArray.length; i++) {
+
+            // make each Array element its own mini Array
+            // [ 'concert-this', '"Dead Can Dance"' ]
+            // [ 'concert-this', '"Thievery Corporation"' ]
+            var commandSubject = randomTxtArray[i].split(',');
+            // console.log(commandSubject);
+
+            // and make each first element the key
+            var theKey = commandSubject[0];
+            // console.log(theKey);
+
+            // and make each second element the value
+            // and .replace every " with nothing
+            var theValue = commandSubject[1].replace(/["]+/g, '');
+            // console.log(theValue);
+
+            arrayObject = {
+                theKey: theValue
+            };
+            console.log(arrayObject);
+
+            // and push each new Object into the new Array
+            objectArray.push(arrayObject);
+            // console.log(objectArray);
+
+        }
+    };
+
+    // node liri.js do-what-it-says
 
 
 
