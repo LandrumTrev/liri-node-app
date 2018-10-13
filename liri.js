@@ -170,19 +170,19 @@ if (command === 'concert-this') {
     // node liri.js movie-this Bolero 
     // node liri.js movie-this Despicable Me 
     // node liri.js movie-this Euro Trip 
-    // node liri.js movie-this Avatar 
-    // node liri.js movie-this Avatar 
-    // node liri.js movie-this Avatar 
-    // node liri.js movie-this Avatar 
-    // node liri.js movie-this Avatar 
-    // node liri.js movie-this Avatar 
-    // node liri.js movie-this Avatar 
-    // node liri.js movie-this Avatar 
-    // node liri.js movie-this Avatar 
-    // node liri.js movie-this Avatar 
-    // node liri.js movie-this Avatar 
-    // node liri.js movie-this Avatar 
-    // node liri.js movie-this Avatar 
+    // node liri.js movie-this The Last Mimzy 
+    // node liri.js movie-this The Life Aquatic with Steve Zissou 
+    // node liri.js movie-this The Princess Bride 
+    // node liri.js movie-this The Pink Panther 
+    // node liri.js movie-this The Wicker Man 
+    // node liri.js movie-this Tropic Thunder 
+    // node liri.js movie-this Watership Down 
+    // node liri.js movie-this The X-Files Fight the Future 
+    // node liri.js movie-this The Jerk 
+    // node liri.js movie-this The Hunger 
+    // node liri.js movie-this Talladega Nights 
+    // node liri.js movie-this Straight to Hell 
+    // node liri.js movie-this Spaceballs 
 
     var OMDbAPI;
 
@@ -202,35 +202,36 @@ if (command === 'concert-this') {
 
         // use JSON.parse(body) to turn JSON data body into a normal Object
         var OMDbData = JSON.parse(body);
-        // console.log('new OMDbData object:', OMDbData); 
+        // console.log(body); 
+        // console.log(OMDbData);
 
         // // * Title of the movie.
-        // var movieTitle = OMDbData[0].title;
+        // var movieTitle = OMDbData.Title;
         // // * Year the movie came out.
-        // var movieYear = OMDbData[0].year;
+        // var movieYear = OMDbData.Year;
         // // * IMDB Rating of the movie.
-        // var movieIMDbRating = OMDbData[0].IMDb.rating;
+        // var movieIMDbRating = OMDbData.Ratings[0].Value;
         // // * Rotten Tomatoes Rating of the movie.
-        // var movieRTRating = OMDbData[0].rottenTomatoes.rating;
+        // var movieRTRating = OMDbData.Ratings[1].Value;
         // // * Country where the movie was produced.
-        // var movieCountry = OMDbData[0].country;
+        // var movieCountry = OMDbData.Country;
         // // * Language of the movie.
-        // var movieLanguage = OMDbData[0].language;
+        // var movieLanguage = OMDbData.Language;
         // // * Actors in the movie.
-        // var movieActors = OMDbData[0].actors;
+        // var movieActors = OMDbData.Actors;
         // // * Plot of the movie.
-        // var moviePlot = OMDbData[0].plot;
+        // var moviePlot = OMDbData.Plot;
 
         // or plop all that data into a single variable:
         var movieData = [
-            "Title: " + OMDbData[0].title,
-            "Year : " + OMDbData[0].year,
-            "IMDb Rating : " + OMDbData[0].IMDb.rating,
-            "Rotten Tomatoes Rating : " + OMDbData[0].rottenTomatoes.rating,
-            "Country: " + OMDbData[0].country,
-            "Language: " + OMDbData[0].language,
-            "Actors: " + OMDbData[0].actors,
-            "Plot: " + OMDbData[0].plot,
+            "Title: " + OMDbData.Title,
+            "Year: " + OMDbData.Year,
+            "IMDb Rating: " + OMDbData.Ratings[0].Value,
+            "Rotten Tomatoes Rating: " + OMDbData.Ratings[1].Value,
+            "Country: " + OMDbData.Country,
+            "Language: " + OMDbData.Language,
+            "Actors: " + OMDbData.Actors,
+            "Plot: " + OMDbData.Plot,
         ].join("\n");
 
         // Append movieData and the divider to log.txt, print movieData to the console
