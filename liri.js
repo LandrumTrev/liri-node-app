@@ -288,12 +288,12 @@ if (command === 'concert-this') {
 
             // and make each first element the key
             var theKey = commandSubject[0];
-            console.log(theKey);
+            // console.log(theKey);
 
             // and make each second element the value
             // and .replace every " with nothing
             var theValue = commandSubject[1].replace(/["]+/g, '');
-            console.log(theValue);
+            // console.log(theValue);
 
             // take theKey and theValue, construct an Object, 
             // and push them into the objectArray
@@ -305,20 +305,18 @@ if (command === 'concert-this') {
         // print out the resulting filled objectArray
         // which is the csv contents of the text file
         // turned into an Array of Objects
-        console.log(objectArray);
+        // console.log(objectArray);
 
-        // var randomSelect = Math.floor(Math.random() * 3) + 1;
-        // console.log(randomSelect);
-        
-        // if (randomSelect === 1) {
-        //     command = 'concert-this';
-        // } else if (randomSelect === 2) {
-        //     command = 'spotify-this-song';
-        // } else if (randomSelect === 3) {
-        //     command = 'movie-this';
-        // }
-        // console.log(command);
+        var randomNumber = Math.floor(Math.random() * objectArray.length) + 1;
+        console.log(randomNumber);
 
+        var randomObject = objectArray[randomNumber];
+        console.log(randomObject);
+
+        command = Object.keys(randomObject).toString();
+        mediaName = Object.values(randomObject).toString();
+        console.log(command);
+        console.log(mediaName);
 
     };
 
