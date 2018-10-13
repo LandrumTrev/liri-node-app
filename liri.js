@@ -40,6 +40,89 @@ var divider = "\n\n=================================\n\n"
 
 // ===============================
 
+if (command === 'do-what-it-says') {
+
+    // use FS to read the random.txt file
+    fs.readFile('./random.txt', 'utf8', function read(err, data) {
+
+        if (err) {
+            throw err;
+        }
+
+        // set a variable to stand for the text contents of the file
+        var randomTxtCSV = data;
+
+        // send that text content to a function to be processed
+        csvToArray(randomTxtCSV);
+
+    });
+
+    // function that processes the data from the random.txt file
+    function csvToArray(csv) {
+
+        // use .split to make the file data an Array
+        // with a new Array element created at each newline
+        randomTxtArray = csv.split('\n');
+        // console.log(randomTxtArray);
+
+        // define a new Array that will hold all the new
+        // {'command':'"mediaName"'} objects
+        var objectArray = [];
+
+        // define an Object variable for the new Objects
+        var arrayObject = {};
+
+
+        // then loop over every Array element 
+        // ['command,"mediaName"', 'command,"mediaName"', ...]
+        // and split each Array element into an Object
+        for (var i = 0; i < randomTxtArray.length; i++) {
+
+            // make each Array element its own mini Array
+            // [ 'concert-this', '"Dead Can Dance"' ]
+            // [ 'concert-this', '"Thievery Corporation"' ]
+            var commandSubject = randomTxtArray[i].split(',');
+            // console.log(commandSubject);
+
+            // and make each first element the key
+            var theKey = commandSubject[0];
+            // console.log(theKey);
+
+            // and make each second element the value
+            // and .replace every " with nothing
+            var theValue = commandSubject[1].replace(/["]+/g, '');
+            // console.log(theValue);
+
+            // take theKey and theValue, construct an Object, 
+            // and push them into the objectArray
+            objectArray.push({
+                [theKey]: theValue
+            });
+
+        }
+        // print out the resulting filled objectArray
+        // which is the csv contents of the text file
+        // turned into an Array of Objects
+        // console.log(objectArray);
+
+        var randomNumber = Math.floor(Math.random() * objectArray.length) + 1;
+        // console.log(randomNumber);
+
+        var randomObject = objectArray[randomNumber];
+        // console.log(randomObject);
+
+        // command = Object.keys(randomObject).toString();
+        command = Object.keys(randomObject).toString();
+        mediaName = Object.values(randomObject).toString();
+        // console.log(command);
+        // console.log(mediaName);
+
+    };
+
+    // node liri.js do-what-it-says
+}
+
+
 if (command === 'concert-this') {
 
     // node liri.js concert-this Dead Can Dance
@@ -241,88 +324,5 @@ if (command === 'concert-this') {
         });
 
     });
-
-} else if (command === 'do-what-it-says') {
-
-    // use FS to read the random.txt file
-    fs.readFile('./random.txt', 'utf8', function read(err, data) {
-
-        if (err) {
-            throw err;
-        }
-
-        // set a variable to stand for the text contents of the file
-        var randomTxtCSV = data;
-
-        // send that text content to a function to be processed
-        csvToArray(randomTxtCSV);
-
-    });
-
-    // function that processes the data from the random.txt file
-    function csvToArray(csv) {
-
-        // use .split to make the file data an Array
-        // with a new Array element created at each newline
-        randomTxtArray = csv.split('\n');
-        // console.log(randomTxtArray);
-
-        // define a new Array that will hold all the new
-        // {'command':'"mediaName"'} objects
-        var objectArray = [];
-
-        // define an Object variable for the new Objects
-        var arrayObject = {};
-
-
-        // then loop over every Array element 
-        // ['command,"mediaName"', 'command,"mediaName"', ...]
-        // and split each Array element into an Object
-        for (var i = 0; i < randomTxtArray.length; i++) {
-
-            // make each Array element its own mini Array
-            // [ 'concert-this', '"Dead Can Dance"' ]
-            // [ 'concert-this', '"Thievery Corporation"' ]
-            var commandSubject = randomTxtArray[i].split(',');
-            // console.log(commandSubject);
-
-            // and make each first element the key
-            var theKey = commandSubject[0];
-            // console.log(theKey);
-
-            // and make each second element the value
-            // and .replace every " with nothing
-            var theValue = commandSubject[1].replace(/["]+/g, '');
-            // console.log(theValue);
-
-            // take theKey and theValue, construct an Object, 
-            // and push them into the objectArray
-            objectArray.push({
-                [theKey]: theValue
-            });
-
-        }
-        // print out the resulting filled objectArray
-        // which is the csv contents of the text file
-        // turned into an Array of Objects
-        // console.log(objectArray);
-
-        var randomNumber = Math.floor(Math.random() * objectArray.length) + 1;
-        console.log(randomNumber);
-
-        var randomObject = objectArray[randomNumber];
-        console.log(randomObject);
-
-        command = Object.keys(randomObject).toString();
-        mediaName = Object.values(randomObject).toString();
-        console.log(command);
-        console.log(mediaName);
-
-    };
-
-    // node liri.js do-what-it-says
-
-
-
 
 }
