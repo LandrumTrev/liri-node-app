@@ -66,7 +66,6 @@ var mediaName = process.argv.slice(3).join(" ");
 if (command === 'rando') {
 
     randoData();
-    apiSelector();
 
 } else {
 
@@ -123,10 +122,6 @@ function randoData() {
         // send that text content to a function to be processed
         csvToArray(randomTxtCSV);
 
-        console.log(randomObject);
-
-        var bonkers = randomObject;
-        console.log(bonkers);
     });
 
     // console.log(fs.readFile.randomObject);
@@ -186,25 +181,24 @@ function randoData() {
         // console.log(randomNumber);
 
         // and use the random number to pick one random object out of objectArray
-        this.randomObject = objectArray[randomNumber];
+        var randomObject = objectArray[randomNumber];
         // console.log(randomObject);
 
-        // returns randomObject into the fs.readfile function
-        // console.log(this.randomObject);
-        return this.randomObject;
+        // set the COMMAND value to the string value of randomObject's single KEY
+        command = Object.keys(randomObject).toString();
+        // console.log(command);
+
+        // set the MEDIANAME value to the string value of randomObject's single VALUE
+        mediaName = Object.values(randomObject).toString();
+        // console.log(mediaName);
+
+        // and call the apiSelector function with random input values now set
+        apiSelector();
 
         // node liri.js rando
     };
-
-    // console.log(randomObject);
-    // console.log(csvToArray);
-    // return csvToArray;
-    // return randomObject;
-
 };
 
-// var bonkers = randoData();
-// console.log(bonkers);
 
 
 // ====================================================
@@ -334,33 +328,33 @@ function getOMDbData(mName) {
         // console.log(body); 
         // console.log(OMDbData);
 
-        // // * Title of the movie.
-        // var movieTitle = OMDbData.Title;
-        // // * Year the movie came out.
-        // var movieYear = OMDbData.Year;
-        // // * IMDB Rating of the movie.
-        // var movieIMDbRating = OMDbData.Ratings[0].Value;
-        // // * Rotten Tomatoes Rating of the movie.
-        // var movieRTRating = OMDbData.Ratings[1].Value;
-        // // * Country where the movie was produced.
-        // var movieCountry = OMDbData.Country;
-        // // * Language of the movie.
-        // var movieLanguage = OMDbData.Language;
-        // // * Actors in the movie.
-        // var movieActors = OMDbData.Actors;
-        // // * Plot of the movie.
-        // var moviePlot = OMDbData.Plot;
+        // * Title of the movie.
+        var movieTitle = OMDbData.Title;
+        // * Year the movie came out.
+        var movieYear = OMDbData.Year;
+        // * IMDB Rating of the movie.
+        var movieIMDbRating = OMDbData.Ratings[0].Value;
+        // * Rotten Tomatoes Rating of the movie.
+        var movieRTRating = OMDbData.Ratings[1].Value;
+        // * Country where the movie was produced.
+        var movieCountry = OMDbData.Country;
+        // * Language of the movie.
+        var movieLanguage = OMDbData.Language;
+        // * Actors in the movie.
+        var movieActors = OMDbData.Actors;
+        // * Plot of the movie.
+        var moviePlot = OMDbData.Plot;
 
         // or plop all that data into a single variable:
         var movieData = [
-            "Title: " + OMDbData.Title,
-            "Year: " + OMDbData.Year,
-            "IMDb Rating: " + OMDbData.Ratings[0].Value,
-            "Rotten Tomatoes Rating: " + OMDbData.Ratings[1].Value,
-            "Country: " + OMDbData.Country,
-            "Language: " + OMDbData.Language,
-            "Actors: " + OMDbData.Actors,
-            "Plot: " + OMDbData.Plot,
+            "Title: " + movieTitle,
+            "Year: " + movieYear,
+            "IMDb Rating: " + movieIMDbRating,
+            "Rotten Tomatoes Rating: " + movieRTRating,
+            "Country: " + movieCountry,
+            "Language: " + movieLanguage,
+            "Actors: " + movieActors,
+            "Plot: " + moviePlot,
         ].join("\n");
 
         // Append movieData and the divider to log.txt, print movieData to the console
