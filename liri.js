@@ -124,9 +124,6 @@ function randoData() {
 
     });
 
-    // console.log(fs.readFile.randomObject);
-    // return fs.readFile;
-
 
     // function that processes the data from the random.txt file
     function csvToArray(csv) {
@@ -184,13 +181,19 @@ function randoData() {
         var randomObject = objectArray[randomNumber];
         // console.log(randomObject);
 
-        // set the COMMAND value to the string value of randomObject's single KEY
-        command = Object.keys(randomObject).toString();
-        // console.log(command);
+        // catch any random.txt errors and replace command with a hard-coded value
+        if (randomObject === null || randomObject === undefined) {
+            command = "concert-this";
+        } else {
+            command = Object.keys(randomObject).toString();
+        }
 
-        // set the MEDIANAME value to the string value of randomObject's single VALUE
-        mediaName = Object.values(randomObject).toString();
-        // console.log(mediaName);
+        // catch any random.txt errors and replace mediaName with a hard-coded value
+        if (randomObject === null || randomObject === undefined) {
+            mediaName = "Thievery Corporation";
+        } else {
+            mediaName = Object.values(randomObject).toString();
+        }
 
         // and call the apiSelector function with random input values now set
         apiSelector();
@@ -217,11 +220,26 @@ function getBandsintownData(mName) {
         var bodyData = JSON.parse(body);
         // console.log('new bodyData object:', bodyData); 
 
-        // make variables for properties of the new bodyData whose values you want to use
-        var venueName = bodyData[0].venue.name;
-        var venueLocation = bodyData[0].venue.city;
-        // use MOMENT.JS to format the datetime data received into human-readable data
-        var venueDate = moment(bodyData[0].datetime, moment.ISO_8601).format('MMMM Do YYYY, h:mm a');
+
+        // set variables for data with error handlers for no value set for property
+        if (bodyData[0]  === undefined || bodyData[0].venue === undefined || bodyData[0].venue.name === undefined) {
+            var venueName = "(no venue name info)";
+        } else {
+            var venueName = bodyData[0].venue.name;
+        }
+
+        if (bodyData[0] === undefined || bodyData[0].venue === undefined || bodyData[0].venue.city === undefined) {
+            var venueLocation = "(no city info)";
+        } else {
+            var venueLocation = bodyData[0].venue.city;
+        }
+
+        if (bodyData[0] === undefined || bodyData[0].datetime === undefined) {
+            var venueDate =  "(no date info)";
+        } else {
+            var venueDate = moment(bodyData[0].datetime, moment.ISO_8601).format('MMMM Do YYYY, h:mm a');
+        }
+
 
         // output the requested infomation back to the CLI
         var showData = `${mediaName} are playing at the ${venueName} in ${venueLocation} on ${venueDate}`;
@@ -229,11 +247,9 @@ function getBandsintownData(mName) {
         // Append showData and the divider to log.txt, print showData to the console
         fs.appendFile("log.txt", showData + divider, function (err) {
             if (err) throw err;
-            console.log(showData);
+            console.log(divider + showData + divider);
         });
-
     });
-
 };
 
 
@@ -264,29 +280,43 @@ function getSpotifyData(mName) {
         .request(spotifyAPI)
         .then(function (data) {
 
-            console.log(data.tracks.items[0].artists[0].name);
-            console.log(data.tracks.items[0].name);
-            console.log(data.tracks.items[0].album.name);
-            console.log(data.tracks.items[0].preview_url);
+            // set variables for data with error handlers for no value set for property
+            if (data.tracks.items[0].artists[0].name === undefined) {
+                var songArtist = "no info";
+            } else {
+                var songArtist = data.tracks.items[0].artists[0].name;
+            }
 
-            // make variables for properties of the new trackData whose values you want to use
-            // var songArtist = data.tracks.items[0].artists[0].name;
-            // var songName = data.tracks.items[0].name;
-            // var songAlbum = data.tracks.items[0].album.name;
-            // var songPreview = data.tracks.items[0].preview_url;
+            if (data.tracks.items[0].name === undefined) {
+                var songName = "no info";
+            } else {
+                var songName = data.tracks.items[0].name;
+            }
+
+            if (data.tracks.items[0].album.name === undefined) {
+                var songAlbum = "no info";
+            } else {
+                var songAlbum = data.tracks.items[0].album.name;
+            }
+
+            if (data.tracks.items[0].preview_url === undefined) {
+                var songPreview = "no info";
+            } else {
+                var songPreview = data.tracks.items[0].preview_url;
+            }
 
             // or plop all that data into a single variable:
             var songDetails = [
-                "Artist: " + data.tracks.items[0].artists[0].name,
-                "Song : " + data.tracks.items[0].name,
-                "Album : " + data.tracks.items[0].album.name,
-                "Preview : " + data.tracks.items[0].preview_url,
+                "Artist: " + songArtist,
+                "Song : " + songName,
+                "Album : " + songAlbum,
+                "Preview : " + songPreview,
             ].join("\n");
 
             // Append showData and the divider to log.txt, print showData to the console
             fs.appendFile("log.txt", songDetails + divider, function (err) {
                 if (err) throw err;
-                console.log(songDetails);
+                console.log(divider + songDetails + divider);
             });
 
         })
@@ -330,49 +360,49 @@ function getOMDbData(mName) {
 
 
         // set variables for data with error handlers for no value set for property
-        if(OMDbData.Title === undefined ) {
+        if (OMDbData.Title === undefined) {
             var movieTitle = "no info";
         } else {
             var movieTitle = OMDbData.Title;
         }
 
-        if(OMDbData.Year === undefined ) {
+        if (OMDbData.Year === undefined) {
             var movieYear = "no info";
         } else {
             var movieYear = OMDbData.Year;
         }
 
-        if(OMDbData.Ratings[0] === undefined ) {
+        if (OMDbData.Ratings === undefined || OMDbData.Ratings[0] === undefined) {
             var movieIMDbRating = "no info";
         } else {
             var movieIMDbRating = OMDbData.Ratings[0].Value;
         }
 
-        if(OMDbData.Ratings[1] === undefined ) {
+        if (OMDbData.Ratings === undefined || OMDbData.Ratings[1] === undefined) {
             var movieRTRating = "no info";
         } else {
             var movieRTRating = OMDbData.Ratings[1].Value;
         }
 
-        if(OMDbData.Country === undefined ) {
+        if (OMDbData.Country === undefined) {
             var movieCountry = "no info";
         } else {
             var movieCountry = OMDbData.Country;
         }
 
-        if(OMDbData.Language === undefined ) {
+        if (OMDbData.Language === undefined) {
             var movieLanguage = "no info";
         } else {
             var movieLanguage = OMDbData.Language;
         }
 
-        if(OMDbData.Actors === undefined ) {
+        if (OMDbData.Actors === undefined) {
             var movieActors = "no info";
         } else {
             var movieActors = OMDbData.Actors;
         }
 
-        if(OMDbData.Plot === undefined ) {
+        if (OMDbData.Plot === undefined) {
             var moviePlot = "no info";
         } else {
             var moviePlot = OMDbData.Plot;
@@ -393,7 +423,7 @@ function getOMDbData(mName) {
         // Append movieData and the divider to log.txt, print movieData to the console
         fs.appendFile("log.txt", movieData + divider, function (err) {
             if (err) throw err;
-            console.log(movieData);
+            console.log(mediaName + "\n" + divider + movieData + divider);
         });
     });
 };
