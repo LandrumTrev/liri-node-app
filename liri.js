@@ -25,33 +25,38 @@ var Spotify = require('node-spotify-api');
 var keys = require("./keys.js");
 // console.log(keys);
 
-// and then access the Spotify data in the required ./keys.js with keys.spotify
-var spotify = new Spotify(keys.spotify);
-// console.log(spotify);
-
-// ===============================
-
 // require the REQUST module to make HTTP requests
 var request = require('request');
 
 // require the MOMENT module to format datetime objects into desired output format
 var moment = require('moment');
 
-// ===============================
+// ====================================================
 
-// variables for the CLI inputs
+// and then access the Spotify data in the required ./keys.js with keys.spotify
+var spotify = new Spotify(keys.spotify);
+// console.log(spotify);
+
+// ====================================================
+
+// divider and newlines to separate entries written to the log.txt file
+var divider = "\n ================================= \n\n"
+
+
+
+// ====================================================
+// ARGV INPUT VARIABLES
+// ====================================================
+
+// node = process.argv[0];
+// liri or liri.js = process.argv[1];
 var command = process.argv[2];
 var mediaName = process.argv.slice(3).join(" ");
-// console.log(mediaName);
+// var command;
+// var mediaName;
 
-// ===============================
-
-// a nice divider and newlines to separate entries written to the log.txt file
-var divider = "\n\n=================================\n\n"
-
-// ===============================
-
-
+// global var for a random {command: mediaName} from random.txt data
+// var randomObject;
 
 // ====================================================
 // FUNCTION CHOOSER BASED ON INPUT ARGS
@@ -61,20 +66,41 @@ var divider = "\n\n=================================\n\n"
 if (command === 'rando') {
 
     randoData();
+    apiSelector();
 
-} else if (command === 'concert-this') {
+} else {
 
-    getBandsintownData(mediaName);
-
-} else if (command === 'spotify-this-song') {
-
-    getSpotifyData(mediaName);
-
-} else if (command === 'movie-this') {
-
-    getOMDbData(mediaName);
+    var command = process.argv[2];
+    var mediaName = process.argv.slice(3).join(" ");
+    apiSelector();
 
 }
+
+
+
+// ====================================================
+// RANDO BELOW
+// ====================================================
+
+
+function apiSelector() {
+
+    if (command === 'concert-this') {
+
+        getBandsintownData(mediaName);
+
+    } else if (command === 'spotify-this-song') {
+
+        getSpotifyData(mediaName);
+
+    } else if (command === 'movie-this') {
+
+        getOMDbData(mediaName);
+
+    }
+
+};
+
 
 
 
@@ -97,25 +123,33 @@ function randoData() {
         // send that text content to a function to be processed
         csvToArray(randomTxtCSV);
 
+        console.log(randomObject);
+
+        var bonkers = randomObject;
+        console.log(bonkers);
     });
+
+    // console.log(fs.readFile.randomObject);
+    // return fs.readFile;
+
 
     // function that processes the data from the random.txt file
     function csvToArray(csv) {
 
         // use .split to make the file data an Array
-        // with a new Array element created at each newline
+        // with a new Array element created for each newline
         randomTxtArray = csv.split('\n');
         // console.log(randomTxtArray);
 
-        // define a new Array that will hold all the new
+        // define a new Array that will hold all the individual lines
         // {'command':'"mediaName"'} objects
         var objectArray = [];
 
-        // define an Object variable for the new Objects
+        // define an Object structure for the individual lines
+        // {'command':'"mediaName"'} objects
         var arrayObject = {};
 
-
-        // then loop over every Array element 
+        // then loop over every element of the raw all-data Array
         // ['command,"mediaName"', 'command,"mediaName"', ...]
         // and split each Array element into an Object
         for (var i = 0; i < randomTxtArray.length; i++) {
@@ -126,11 +160,11 @@ function randoData() {
             var commandSubject = randomTxtArray[i].split(',');
             // console.log(commandSubject);
 
-            // and make each first element the key
+            // separate out each first element for an object key
             var theKey = commandSubject[0];
             // console.log(theKey);
 
-            // and make each second element the value
+            // separate out each second element for an object value
             // and .replace every " with nothing
             var theValue = commandSubject[1].replace(/["]+/g, '');
             // console.log(theValue);
@@ -141,27 +175,36 @@ function randoData() {
                 [theKey]: theValue
             });
 
-        }
-        // print out the resulting filled objectArray
-        // which is the csv contents of the text file
-        // turned into an Array of Objects
+        };
+
+        // after loop finishes, print out the resulting filled objectArray:
+        // csv content of random.txt turned into an Array of Objects
         // console.log(objectArray);
 
+        // then get a random number between 1 and the length of objectArray
         var randomNumber = Math.floor(Math.random() * objectArray.length) + 1;
         // console.log(randomNumber);
 
-        var randomObject = objectArray[randomNumber];
+        // and use the random number to pick one random object out of objectArray
+        this.randomObject = objectArray[randomNumber];
         // console.log(randomObject);
 
-        // command = Object.keys(randomObject).toString();
-        command = Object.keys(randomObject).toString();
-        mediaName = Object.values(randomObject).toString();
-        // console.log(command);
-        // console.log(mediaName);
+        // returns randomObject into the fs.readfile function
+        // console.log(this.randomObject);
+        return this.randomObject;
 
         // node liri.js rando
     };
+
+    // console.log(randomObject);
+    // console.log(csvToArray);
+    // return csvToArray;
+    // return randomObject;
+
 };
+
+// var bonkers = randoData();
+// console.log(bonkers);
 
 
 // ====================================================
