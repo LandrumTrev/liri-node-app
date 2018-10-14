@@ -40,7 +40,7 @@ var spotify = new Spotify(keys.spotify);
 // ====================================================
 
 // divider and newlines to separate entries written to the log.txt file
-var divider = "\n ================================= \n\n"
+var divider = "\n\n+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n\n"
 
 
 
@@ -328,22 +328,55 @@ function getOMDbData(mName) {
         // console.log(body); 
         // console.log(OMDbData);
 
-        // * Title of the movie.
-        var movieTitle = OMDbData.Title;
-        // * Year the movie came out.
-        var movieYear = OMDbData.Year;
-        // * IMDB Rating of the movie.
-        var movieIMDbRating = OMDbData.Ratings[0].Value;
-        // * Rotten Tomatoes Rating of the movie.
-        var movieRTRating = OMDbData.Ratings[1].Value;
-        // * Country where the movie was produced.
-        var movieCountry = OMDbData.Country;
-        // * Language of the movie.
-        var movieLanguage = OMDbData.Language;
-        // * Actors in the movie.
-        var movieActors = OMDbData.Actors;
-        // * Plot of the movie.
-        var moviePlot = OMDbData.Plot;
+
+        // set variables for data with error handlers for no value set for property
+        if(OMDbData.Title === undefined ) {
+            var movieTitle = "no info";
+        } else {
+            var movieTitle = OMDbData.Title;
+        }
+
+        if(OMDbData.Year === undefined ) {
+            var movieYear = "no info";
+        } else {
+            var movieYear = OMDbData.Year;
+        }
+
+        if(OMDbData.Ratings[0] === undefined ) {
+            var movieIMDbRating = "no info";
+        } else {
+            var movieIMDbRating = OMDbData.Ratings[0].Value;
+        }
+
+        if(OMDbData.Ratings[1] === undefined ) {
+            var movieRTRating = "no info";
+        } else {
+            var movieRTRating = OMDbData.Ratings[1].Value;
+        }
+
+        if(OMDbData.Country === undefined ) {
+            var movieCountry = "no info";
+        } else {
+            var movieCountry = OMDbData.Country;
+        }
+
+        if(OMDbData.Language === undefined ) {
+            var movieLanguage = "no info";
+        } else {
+            var movieLanguage = OMDbData.Language;
+        }
+
+        if(OMDbData.Actors === undefined ) {
+            var movieActors = "no info";
+        } else {
+            var movieActors = OMDbData.Actors;
+        }
+
+        if(OMDbData.Plot === undefined ) {
+            var moviePlot = "no info";
+        } else {
+            var moviePlot = OMDbData.Plot;
+        }
 
         // or plop all that data into a single variable:
         var movieData = [
@@ -382,7 +415,6 @@ function getOMDbData(mName) {
 // node liri.js concert-this Nine Inch Nails
 // node liri.js concert-this Neko Case
 // node liri.js concert-this New Order
-// node liri.js concert-this Mylène Farmer
 // node liri.js concert-this Morrissey
 // node liri.js concert-this Michael Brook
 // node liri.js concert-this M83
