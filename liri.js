@@ -35,6 +35,15 @@ var Spotify = require('node-spotify-api');
 
 // and then access the Spotify data in the required ./keys.js with keys.spotify
 var spotify = new Spotify(keys.spotify);
+// console.log(spotify);
+
+// and then access the Spotify data in the required ./keys.js with keys.spotify
+var bandintownAPIkey = keys.bandintownAPIkey.key;
+// console.log(bandintownAPIkey);
+
+// and then access the Spotify data in the required ./keys.js with keys.spotify
+var OMDbKey = keys.OMDbKey.key;
+// console.log(OMDbKey);
 
 // ====================================================
 
@@ -203,8 +212,8 @@ function randoData() {
 // BANDSINTOWN BELOW
 // ====================================================
 
-// FUNCTION CALLED BY: node liri.js concert-this George Winston
 // function gets called with (mediaName) passed into it's (nName) argument
+// FUNCTION CALLED BY: node liri.js concert-this George Winston
 // but if no (mediaName) is passed into the function, then...
 // DEAD CAN DANCE FUNCTIONALITY CALLED BY: node liri.js concert-this
 function getBandsintownData(mName) {
@@ -212,11 +221,12 @@ function getBandsintownData(mName) {
     if (!mName) {
 
         // Dead Can Dance
-        var bandsInTownAPI = "https://rest.bandsintown.com/artists/Dead+Can+Dance/events?app_id=7ed0c7d7d54a0ea01c5b00adf0d359ea";
+        var bandsInTownAPI = "https://rest.bandsintown.com/artists/Dead+Can+Dance/events?app_id=" + bandintownAPIkey;
+        // console.log(bandsInTownAPI);
 
     } else {
 
-        var bandsInTownAPI = "https://rest.bandsintown.com/artists/" + mName + "/events?app_id=7ed0c7d7d54a0ea01c5b00adf0d359ea";
+        var bandsInTownAPI = "https://rest.bandsintown.com/artists/" + mName + "/events?app_id=" + bandintownAPIkey;
         // console.log(bandsInTownAPI);
 
     }
@@ -264,7 +274,7 @@ function getBandsintownData(mName) {
         });
     });
 };
-// function gets called with (mediaName) passed into it's (nName) argument
+// FUNCTION CALLED BY: node liri.js concert-this George Winston
 // but if no (mediaName) is passed into the function, then...
 // DEAD CAN DANCE FUNCTIONALITY CALLED BY: node liri.js concert-this
 
@@ -274,21 +284,18 @@ function getBandsintownData(mName) {
 // SPOTIFY BELOW
 // ====================================================
 
-// FUNCTION CALLED BY: node liri.js spotify-this-song Enter Sandman
 // function gets called with (mediaName) passed into it's (nName) argument
+// FUNCTION CALLED BY: node liri.js spotify-this-song Enter Sandman
 // but if no (mediaName) is passed into the function, then...
-// RICK-ROLLED FUNCTIONALITY CALLED BY: node liri.js spotify-this-song
+// ACE OF BASE FUNCTIONALITY CALLED BY: node liri.js spotify-this-song
 function getSpotifyData(mName) {
 
     var spotifyAPI;
 
     if (!mName) {
 
-        // then get Rick Rolled: Never Gonna Give You Up by Rick Astley
-        spotifyAPI = "https://api.spotify.com/v1/search?q=track%3ANever%20Gonna%20Give%20You%20Up%20artist%3ARick%20Astley&type=track";
-
-        // or, get Aced: The Sign by Ace of Base
-        // spotifyAPI = "https://api.spotify.com/v1/search?q=track%3AThe%20Sign%20artist%3AAce%20Of%20Base&type=track";
+        // get Aced: The Sign by Ace of Base
+        spotifyAPI = "https://api.spotify.com/v1/search?q=track%3AThe%20Sign%20artist%3AAce%20Of%20Base&type=track";
 
     } else {
 
@@ -347,7 +354,7 @@ function getSpotifyData(mName) {
         });
 
 };
-// function gets called with (mediaName) passed into it's (nName) argument
+// FUNCTION CALLED BY: node liri.js spotify-this-song Enter Sandman
 // but if no (mediaName) is passed into the function, then...
 // RICK-ROLLED FUNCTIONALITY CALLED BY: node liri.js spotify-this-song
 
@@ -368,10 +375,12 @@ function getOMDbData(mName) {
     if (!mName) {
 
         // Valerian and the City of a Thousand Planets
-        OMDbAPI = "http://www.omdbapi.com/?i=tt3896198&apikey=a7b952c&t=Valerian+and+the+City+of+a+Thousand+Planets";
+        OMDbAPI = "http://www.omdbapi.com/?i=tt3896198&apikey=" + OMDbKey + "&t=Valerian+and+the+City+of+a+Thousand+Planets";
+        // console.log(OMDbAPI);
 
     } else {
-        OMDbAPI = "http://www.omdbapi.com/?i=tt3896198&apikey=a7b952c&t=" + mName;
+        OMDbAPI = "http://www.omdbapi.com/?i=tt3896198&apikey=" + OMDbKey + "&t=" + mName;
+        // console.log(OMDbAPI);
     }
 
     request(OMDbAPI, function (error, response, body) {

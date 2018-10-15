@@ -11,9 +11,21 @@
     "url": "git+https://github.com/LandrumTrev/liri-node-app.git"
   },
   "keywords": [
+    "BandsInTown",
+    "concert",
+    "band",
+    "bands",
+    "music",
+    "song",
+    "songs",
+    "Spotify",
+    "OMDb",
+    "movie",
+    "movies",
     "LIRI",
     "Node",
     "NodeJS",
+    "CLI",
     "app",
     "API",
     "APIs"

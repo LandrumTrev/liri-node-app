@@ -1,5 +1,4 @@
 # files to ignore:
 node_modules
-misc
 .DS_Store
 .env
