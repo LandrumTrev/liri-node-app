@@ -1,5 +1,5 @@
 # files to ignore:
-misc
 node_modules
+misc
 .DS_Store
 .env
