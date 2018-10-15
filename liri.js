@@ -64,10 +64,10 @@ var mediaName = process.argv.slice(3).join(" ");
 // FUNCTION CHOOSER BASED ON INPUT ARGS
 // ====================================================
 
-if (command === 'rando') {
+if (command === 'random') {
 
-    // if user enters $node liri rando
-    randoData();
+    // if user enters $node liri random
+    randomData();
 
 } else {
 
@@ -89,7 +89,7 @@ if (command === 'rando') {
 
 
 // ====================================================
-// RANDO BELOW
+// API SELECTOR BELOW
 // ====================================================
 
 
@@ -114,11 +114,11 @@ function apiSelector() {
 
 
 // ====================================================
-// RANDO BELOW
+// RANDOM BELOW
 // ====================================================
 
-// FUNCTION CALLED BY: node liri.js rando
-function randoData() {
+// FUNCTION CALLED BY: node liri.js random
+function randomData() {
 
     // use FS to read the random.txt file
     fs.readFile('./random.txt', 'utf8', function read(err, data) {
@@ -204,7 +204,7 @@ function randoData() {
         apiSelector();
     };
 };
-// FUNCTION CALLED BY: node liri.js rando
+// FUNCTION CALLED BY: node liri.js random
 
 
 
