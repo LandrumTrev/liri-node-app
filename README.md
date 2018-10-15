@@ -5,6 +5,10 @@
 *Node.js, npm, node_modules (fs, dotenv, request, moment, node-spotify-api), log file, error-handling, and protected API keys: BandsInTown, Spotify, OMDb. Takes in band, song, or movie information requests from the terminal, makes an async call to one of three APIs, and outputs the returned info to the console as well as logging it to a .txt file.*
 _________________________________________________
 
+[[LIRI demo movie](https://github.com/LandrumTrev/liri-node-app/blob/master/LIRI-demo.mp4)](https://github.com/LandrumTrev/liri-node-app/blob/master/LIRI-demo.mp4)
+
+_________________________________________________
+
 LIRI is a Command Line Interface node.js app that provides information about a band's next show from BandsInTown, a song's Spotify info, or a movie's OMDb info. The information returned is both printed out to the CLI console and logged into the log.txt file. 
 
 LIRI's functions are accessed by the Terminal commands:
