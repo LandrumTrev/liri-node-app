@@ -152,8 +152,8 @@ function randoData() {
             // console.log(theKey);
 
             // make a value variable out of the second element of the two-element Array
-            // and strip off the surrounding quotes
-            var theValue = commandSubject[1].replace(/["]+/g, '');
+            // and strip off surrounding single or double quotes
+            var theValue = commandSubject[1].replace(/['"]+/g, '');
             // console.log(theValue);
 
             // then take theKey and theValue, construct an Object, 
