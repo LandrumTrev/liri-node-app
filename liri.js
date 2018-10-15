@@ -5,6 +5,9 @@
 // Full Stack Developer Bootcamp (July 2018)
 // ====================================================
 
+// NOTE: band/song/movie names containing "&" will cause minor errors
+// use "and" instead of "&" in names
+
 
 // ====================================================
 // REQURED MODULES BELOW
@@ -13,17 +16,11 @@
 // require FS to write to an external log files
 var fs = require("fs");
 
-// require DOTENV and have it load the info in .env to the .config() settings
+// require DOTENV so it can load the info in .env to the .config() settings
 var dotenv = require("dotenv").config();
-// console.log(dotenv);
-
-// require the NODE-SPOTIFY-API to be able to use its functionality
-var Spotify = require('node-spotify-api');
-// console.log(Spotify);
 
 // and require the keys.js file, which holds placeholders for the secret info in .env
 var keys = require("./keys.js");
-// console.log(keys);
 
 // require the REQUST module to make HTTP requests
 var request = require('request');
@@ -31,15 +28,17 @@ var request = require('request');
 // require the MOMENT module to format datetime objects into desired output format
 var moment = require('moment');
 
+// require the NODE-SPOTIFY-API to be able to use its functionality
+var Spotify = require('node-spotify-api');
+
 // ====================================================
 
 // and then access the Spotify data in the required ./keys.js with keys.spotify
 var spotify = new Spotify(keys.spotify);
-// console.log(spotify);
 
 // ====================================================
 
-// divider and newlines to separate entries written to the log.txt file
+// divider and newlines to separate entries written to the console and log.txt file
 var divider = "\n\n+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n\n"
 
 
@@ -48,31 +47,34 @@ var divider = "\n\n+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=\n\
 // ARGV INPUT VARIABLES
 // ====================================================
 
-// node = process.argv[0];
-// liri or liri.js = process.argv[1];
 var command = process.argv[2];
 var mediaName = process.argv.slice(3).join(" ");
-// var command;
-// var mediaName;
 
-// global var for a random {command: mediaName} from random.txt data
-// var randomObject;
 
 // ====================================================
 // FUNCTION CHOOSER BASED ON INPUT ARGS
 // ====================================================
 
-
 if (command === 'rando') {
 
+    // if user enters $node liri rando
     randoData();
 
 } else {
 
-    var command = process.argv[2];
-    var mediaName = process.argv.slice(3).join(" ");
-    apiSelector();
+    if (!command) {
 
+        // if user enters $node liri
+        command = "spotify-this-song";
+        mediaName = "Never Gonna Give You Up";
+
+        apiSelector();
+
+    } else {
+
+        // if user enters $node liri <command> <mediaName>
+        apiSelector();
+    }
 }
 
 
@@ -97,7 +99,6 @@ function apiSelector() {
         getOMDbData(mediaName);
 
     }
-
 };
 
 
@@ -107,6 +108,7 @@ function apiSelector() {
 // RANDO BELOW
 // ====================================================
 
+// FUNCTION CALLED BY: node liri.js rando
 function randoData() {
 
     // use FS to read the random.txt file
@@ -119,88 +121,81 @@ function randoData() {
         // set a variable to stand for the text contents of the file
         var randomTxtCSV = data;
 
-        // send that text content to a function to be processed
+        // send random.txt file contents to csvArray(csv) to format data
         csvToArray(randomTxtCSV);
 
     });
 
 
-    // function that processes the data from the random.txt file
+    // function that formats the data from the random.txt file
     function csvToArray(csv) {
 
-        // use .split to make the file data an Array
-        // with a new Array element created for each newline
+        // make the file data an Array, .split() at each new line
         randomTxtArray = csv.split('\n');
         // console.log(randomTxtArray);
 
-        // define a new Array that will hold all the individual lines
-        // {'command':'"mediaName"'} objects
+        // Array that will hold all the individual {'command':'"mediaName"'} objects
         var objectArray = [];
 
-        // define an Object structure for the individual lines
-        // {'command':'"mediaName"'} objects
+        // Object structure for each {'command':'"mediaName"'} object
         var arrayObject = {};
 
-        // then loop over every element of the raw all-data Array
-        // ['command,"mediaName"', 'command,"mediaName"', ...]
-        // and split each Array element into an Object
+        // loop through randomTxtArray ['command,"mediaName"', 'command,"mediaName"', ...]
         for (var i = 0; i < randomTxtArray.length; i++) {
 
-            // make each Array element its own mini Array
-            // [ 'concert-this', '"Dead Can Dance"' ]
-            // [ 'concert-this', '"Thievery Corporation"' ]
+            // .split() each element into its own two-element Array [ 'concert-this', '"Dead Can Dance"' ]
             var commandSubject = randomTxtArray[i].split(',');
             // console.log(commandSubject);
 
-            // separate out each first element for an object key
+            // make a key variable out of the first element of the two-element Array
             var theKey = commandSubject[0];
             // console.log(theKey);
 
-            // separate out each second element for an object value
-            // and .replace every " with nothing
+            // make a value variable out of the second element of the two-element Array
+            // and strip off the surrounding quotes
             var theValue = commandSubject[1].replace(/["]+/g, '');
             // console.log(theValue);
 
-            // take theKey and theValue, construct an Object, 
-            // and push them into the objectArray
+            // then take theKey and theValue, construct an Object, 
+            // and push each Object into objectArray, which holds Object-ified data from random.txt
             objectArray.push({
                 [theKey]: theValue
             });
 
         };
 
-        // after loop finishes, print out the resulting filled objectArray:
-        // csv content of random.txt turned into an Array of Objects
+        // print the resulting objectArray to check it
         // console.log(objectArray);
 
         // then get a random number between 1 and the length of objectArray
         var randomNumber = Math.floor(Math.random() * objectArray.length) + 1;
         // console.log(randomNumber);
 
-        // and use the random number to pick one random object out of objectArray
+        // and use that random number to pick one object out of objectArray
         var randomObject = objectArray[randomNumber];
         // console.log(randomObject);
 
-        // catch any random.txt errors and replace command with a hard-coded value
+        // COMMAND: catch any input data errors in the command input data 
+        // by replacing command with a hard-coded value
         if (randomObject === null || randomObject === undefined) {
             command = "concert-this";
         } else {
             command = Object.keys(randomObject).toString();
         }
 
-        // catch any random.txt errors and replace mediaName with a hard-coded value
+        // MEDIANAME: catch any input data errors in the mediaName input data 
+        // by replacing mediaName with a hard-coded value
         if (randomObject === null || randomObject === undefined) {
             mediaName = "Thievery Corporation";
         } else {
             mediaName = Object.values(randomObject).toString();
         }
 
-        // and call the apiSelector function with random input values now set
+        // and call the apiSelector function with input values now set
         apiSelector();
-
-        // node liri.js rando
     };
 };
+// FUNCTION CALLED BY: node liri.js rando
 
 
 
@@ -208,11 +203,23 @@ function randoData() {
 // BANDSINTOWN BELOW
 // ====================================================
 
-
+// FUNCTION CALLED BY: node liri.js concert-this George Winston
+// function gets called with (mediaName) passed into it's (nName) argument
+// but if no (mediaName) is passed into the function, then...
+// DEAD CAN DANCE FUNCTIONALITY CALLED BY: node liri.js concert-this
 function getBandsintownData(mName) {
 
-    var bandsInTownAPI = "https://rest.bandsintown.com/artists/" + mName + "/events?app_id=7ed0c7d7d54a0ea01c5b00adf0d359ea";
-    // console.log(bandsInTownAPI);
+    if (!mName) {
+
+        // Dead Can Dance
+        var bandsInTownAPI = "https://rest.bandsintown.com/artists/Dead+Can+Dance/events?app_id=7ed0c7d7d54a0ea01c5b00adf0d359ea";
+
+    } else {
+
+        var bandsInTownAPI = "https://rest.bandsintown.com/artists/" + mName + "/events?app_id=7ed0c7d7d54a0ea01c5b00adf0d359ea";
+        // console.log(bandsInTownAPI);
+
+    }
 
     request(bandsInTownAPI, function (error, response, body) {
 
@@ -221,8 +228,14 @@ function getBandsintownData(mName) {
         // console.log('new bodyData object:', bodyData); 
 
 
-        // set variables for data with error handlers for no value set for property
-        if (bodyData[0]  === undefined || bodyData[0].venue === undefined || bodyData[0].venue.name === undefined) {
+        // set variables for data, with error handlers for no returned property value set
+        if (bodyData[0] === undefined || bodyData[0].lineup === undefined) {
+            var theLineup = "(no band info)";
+        } else {
+            var theLineup = bodyData[0].lineup;
+        }
+
+        if (bodyData[0] === undefined || bodyData[0].venue === undefined || bodyData[0].venue.name === undefined) {
             var venueName = "(no venue name info)";
         } else {
             var venueName = bodyData[0].venue.name;
@@ -235,22 +248,25 @@ function getBandsintownData(mName) {
         }
 
         if (bodyData[0] === undefined || bodyData[0].datetime === undefined) {
-            var venueDate =  "(no date info)";
+            var venueDate = "(no date info)";
         } else {
             var venueDate = moment(bodyData[0].datetime, moment.ISO_8601).format('MMMM Do YYYY, h:mm a');
         }
 
 
-        // output the requested infomation back to the CLI
-        var showData = `${mediaName} are playing at the ${venueName} in ${venueLocation} on ${venueDate}`;
+        // construct a String Literal for reader-friendly output of the data
+        var showData = `${mediaName}: ${theLineup} are playing at the ${venueName} in ${venueLocation} on ${venueDate}`;
 
-        // Append showData and the divider to log.txt, print showData to the console
+        // and then append the data entry to log.txt, and also output it to the console
         fs.appendFile("log.txt", showData + divider, function (err) {
             if (err) throw err;
             console.log(divider + showData + divider);
         });
     });
 };
+// function gets called with (mediaName) passed into it's (nName) argument
+// but if no (mediaName) is passed into the function, then...
+// DEAD CAN DANCE FUNCTIONALITY CALLED BY: node liri.js concert-this
 
 
 
@@ -258,8 +274,10 @@ function getBandsintownData(mName) {
 // SPOTIFY BELOW
 // ====================================================
 
-
-
+// FUNCTION CALLED BY: node liri.js spotify-this-song Enter Sandman
+// function gets called with (mediaName) passed into it's (nName) argument
+// but if no (mediaName) is passed into the function, then...
+// RICK-ROLLED FUNCTIONALITY CALLED BY: node liri.js spotify-this-song
 function getSpotifyData(mName) {
 
     var spotifyAPI;
@@ -273,14 +291,18 @@ function getSpotifyData(mName) {
         // spotifyAPI = "https://api.spotify.com/v1/search?q=track%3AThe%20Sign%20artist%3AAce%20Of%20Base&type=track";
 
     } else {
+
         spotifyAPI = "https://api.spotify.com/v1/search?q=" + mName + "&type=track";
+
     }
 
+    // construct a new Spotify() object with node-spotify-api
+    // with an Async .request and .then Promise function to handle returned data
     spotify
         .request(spotifyAPI)
         .then(function (data) {
 
-            // set variables for data with error handlers for no value set for property
+            // set variables for data, with error handlers for no returned property value set
             if (data.tracks.items[0].artists[0].name === undefined) {
                 var songArtist = "no info";
             } else {
@@ -305,7 +327,7 @@ function getSpotifyData(mName) {
                 var songPreview = data.tracks.items[0].preview_url;
             }
 
-            // or plop all that data into a single variable:
+            // and then put all those variables' data into an Array:
             var songDetails = [
                 "Artist: " + songArtist,
                 "Song : " + songName,
@@ -313,7 +335,7 @@ function getSpotifyData(mName) {
                 "Preview : " + songPreview,
             ].join("\n");
 
-            // Append showData and the divider to log.txt, print showData to the console
+            // append the songDetails data array to log.txt, and also output it to the CLI
             fs.appendFile("log.txt", songDetails + divider, function (err) {
                 if (err) throw err;
                 console.log(divider + songDetails + divider);
@@ -325,6 +347,9 @@ function getSpotifyData(mName) {
         });
 
 };
+// function gets called with (mediaName) passed into it's (nName) argument
+// but if no (mediaName) is passed into the function, then...
+// RICK-ROLLED FUNCTIONALITY CALLED BY: node liri.js spotify-this-song
 
 
 
@@ -332,20 +357,18 @@ function getSpotifyData(mName) {
 // OMDb BELOW
 // ====================================================
 
-
-
-// function that calls the OMDb API
+// function gets called with (mediaName) passed into it's (nName) argument
+// FUNCTION CALLED BY: node liri.js movie-this Lucy
+// but if no (mediaName) is passed into the function, then...
+// LUC BESSON GRAPHIC NOVEL FUNCTIONALITY CALLED BY: node liri.js movie-this
 function getOMDbData(mName) {
 
     var OMDbAPI;
 
     if (!mName) {
 
-        // Mr. Nobody
-        // OMDbAPI = "http://www.omdbapi.com/?i=tt3896198&apikey=a7b952c&t=Mr. Nobody";
-
-        // The Big Blue
-        OMDbAPI = "http://www.omdbapi.com/?i=tt3896198&apikey=a7b952c&t=The Big Blue";
+        // Valerian and the City of a Thousand Planets
+        OMDbAPI = "http://www.omdbapi.com/?i=tt3896198&apikey=a7b952c&t=Valerian+and+the+City+of+a+Thousand+Planets";
 
     } else {
         OMDbAPI = "http://www.omdbapi.com/?i=tt3896198&apikey=a7b952c&t=" + mName;
@@ -359,7 +382,7 @@ function getOMDbData(mName) {
         // console.log(OMDbData);
 
 
-        // set variables for data with error handlers for no value set for property
+        // set variables for data, with error handlers for no returned property value set
         if (OMDbData.Title === undefined) {
             var movieTitle = "no info";
         } else {
@@ -408,7 +431,7 @@ function getOMDbData(mName) {
             var moviePlot = OMDbData.Plot;
         }
 
-        // or plop all that data into a single variable:
+        // put all the movie data values into an Array
         var movieData = [
             "Title: " + movieTitle,
             "Year: " + movieYear,
@@ -420,81 +443,13 @@ function getOMDbData(mName) {
             "Plot: " + moviePlot,
         ].join("\n");
 
-        // Append movieData and the divider to log.txt, print movieData to the console
+        // and append the movie data to random.txt, and also print it out to the console
         fs.appendFile("log.txt", movieData + divider, function (err) {
             if (err) throw err;
             console.log(mediaName + "\n" + divider + movieData + divider);
         });
     });
 };
-
-
-
-// ====================================================
-// SAMPLE ENTRIES FROM/FOR THE random.txt FILE
-// ====================================================
-
-// node liri.js rando
-
-// node liri.js concert-this Dead Can Dance
-// node liri.js concert-this The Birthday Massacre
-// node liri.js concert-this Thievery Corporation
-// node liri.js concert-this Sting
-// node liri.js concert-this Sigur Ros
-// node liri.js concert-this Royksopp
-// node liri.js concert-this Nine Inch Nails
-// node liri.js concert-this Neko Case
-// node liri.js concert-this New Order
-// node liri.js concert-this Morrissey
-// node liri.js concert-this Michael Brook
-// node liri.js concert-this M83
-// node liri.js concert-this Lykke Li
-// node liri.js concert-this Hooverphonic
-// node liri.js concert-this Grimes
-// node liri.js concert-this God Is an Astronaut
-// node liri.js concert-this The Church
-// node liri.js concert-this Above & Beyond
-// node liri.js concert-this Slowdive
-// node liri.js concert-this Man Without Country
-// node liri.js concert-this Mumford & Sons
-
-// node liri.js spotify-this-song Cruel Summer
-// node liri.js spotify-this-song As Long as You Follow 
-// node liri.js spotify-this-song Bizarre Love Triangle 
-// node liri.js spotify-this-song Voices Carry
-// node liri.js spotify-this-song Year of the Cat
-// node liri.js spotify-this-song A Preacher in New England 
-// node liri.js spotify-this-song Before Barbed Wire 
-// node liri.js spotify-this-song Clumsy Sky 
-// node liri.js spotify-this-song Radau 
-// node liri.js spotify-this-song World Princess part II 
-// node liri.js spotify-this-song Algebra of Darkness 
-// node liri.js spotify-this-song Carolyns Fingers 
-// node liri.js spotify-this-song Avatar 
-// node liri.js spotify-this-song Oregon Hill 
-// node liri.js spotify-this-song Shape of My Heart 
-
-// node liri.js movie-this The Big Blue 
-// node liri.js movie-this Leon The Professional 
-// node liri.js movie-this La Femme Nikita 
-// node liri.js movie-this 2001 A Space Odyssey 
-// node liri.js movie-this Amelie 
-// node liri.js movie-this Avatar 
-// node liri.js movie-this Bolero 
-// node liri.js movie-this Despicable Me 
-// node liri.js movie-this Euro Trip 
-// node liri.js movie-this The Last Mimzy 
-// node liri.js movie-this The Life Aquatic with Steve Zissou 
-// node liri.js movie-this The Princess Bride 
-// node liri.js movie-this The Pink Panther 
-// node liri.js movie-this The Wicker Man 
-// node liri.js movie-this Tropic Thunder 
-// node liri.js movie-this Watership Down 
-// node liri.js movie-this The X-Files Fight the Future 
-// node liri.js movie-this The Jerk 
-// node liri.js movie-this The Hunger 
-// node liri.js movie-this Talladega Nights 
-// node liri.js movie-this Straight to Hell 
-// node liri.js movie-this Spaceballs
-
-// node liri.js rando
+// FUNCTION CALLED BY: node liri.js movie-this Lucy
+// but if no (mediaName) is passed into the function, then...
+// LUC BESSON GRAPHIC NOVEL FUNCTIONALITY CALLED BY: node liri.js movie-this
