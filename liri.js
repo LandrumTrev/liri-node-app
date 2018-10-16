@@ -33,15 +33,15 @@ var Spotify = require('node-spotify-api');
 
 // ====================================================
 
-// and then access the Spotify data in the required ./keys.js with keys.spotify
+// access the Spotify data in the required ./keys.js with keys.spotify
 var spotify = new Spotify(keys.spotify);
 // console.log(spotify);
 
-// and then access the Spotify data in the required ./keys.js with keys.spotify
+// access the BandsInTown API key
 var bandintownAPIkey = keys.bandintownAPIkey.key;
 // console.log(bandintownAPIkey);
 
-// and then access the Spotify data in the required ./keys.js with keys.spotify
+// access the OMDb API key
 var OMDbKey = keys.OMDbKey.key;
 // console.log(OMDbKey);
 
