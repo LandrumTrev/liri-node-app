@@ -1,6 +1,6 @@
 # LIRI Node App
 
-### LIRI Node App, a CLI Language Interpretation and Recognition Interface
+### A Node.js CLI Language Interpretation and Recognition Interface
 
 *Node.js, npm, node_modules (fs, dotenv, request, moment, node-spotify-api), log file, error-handling, and protected API keys: BandsInTown, Spotify, OMDb. Takes in band, song, or movie information requests from the terminal, makes an async call to one of three APIs, and outputs the returned info to the console as well as logging it to a .txt file.*
 _________________________________________________
