@@ -38,7 +38,7 @@
   "homepage": "https://github.com/LandrumTrev/liri-node-app#readme",
   "dependencies": {
     "dotenv": "^6.2.0",
-    "lodash": "^4.17.14",
+    "lodash": "^4.17.19",
     "moment": "^2.24.0",
     "node-spotify-api": "^1.1.1",
     "request": "^2.88.0"
